@@ -57,6 +57,10 @@
             "Microsoft.AspNetCore.OpenApi": {
               "target": "Package",
               "version": "[9.0.10, )"
+            },
+            "Microsoft.NETCore.Platforms": {
+              "target": "Package",
+              "version": "[8.0.0-preview.7.23375.6, )"
             }
           },
           "imports": [
