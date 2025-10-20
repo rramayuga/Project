@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\rmayu\\Documents\\TestProj\\Project\\api\\api.csproj": {}
+    "C:\\Users\\rmayu\\Documents\\GitHub\\ASP.NET-Tutorials\\api\\api.csproj": {}
   },
   "projects": {
-    "C:\\Users\\rmayu\\Documents\\TestProj\\Project\\api\\api.csproj": {
+    "C:\\Users\\rmayu\\Documents\\GitHub\\ASP.NET-Tutorials\\api\\api.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\rmayu\\Documents\\TestProj\\Project\\api\\api.csproj",
+        "projectUniqueName": "C:\\Users\\rmayu\\Documents\\GitHub\\ASP.NET-Tutorials\\api\\api.csproj",
         "projectName": "api",
-        "projectPath": "C:\\Users\\rmayu\\Documents\\TestProj\\Project\\api\\api.csproj",
+        "projectPath": "C:\\Users\\rmayu\\Documents\\GitHub\\ASP.NET-Tutorials\\api\\api.csproj",
         "packagesPath": "C:\\Users\\rmayu\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\rmayu\\Documents\\TestProj\\Project\\api\\obj\\",
+        "outputPath": "C:\\Users\\rmayu\\Documents\\GitHub\\ASP.NET-Tutorials\\api\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -50,6 +50,10 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "dependencies": {
+            "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[9.0.10, )"
+            },
             "Microsoft.AspNetCore.OpenApi": {
               "target": "Package",
               "version": "[9.0.10, )"
