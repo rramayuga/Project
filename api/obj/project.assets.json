@@ -4674,11 +4674,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\rmayu\\Documents\\GitHub\\ASP.NET-Tutorials\\api\\api.csproj",
+      "projectUniqueName": "C:\\Users\\rmayu\\Documents\\GitHub\\Project\\api\\api.csproj",
       "projectName": "api",
-      "projectPath": "C:\\Users\\rmayu\\Documents\\GitHub\\ASP.NET-Tutorials\\api\\api.csproj",
+      "projectPath": "C:\\Users\\rmayu\\Documents\\GitHub\\Project\\api\\api.csproj",
       "packagesPath": "C:\\Users\\rmayu\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\rmayu\\Documents\\GitHub\\ASP.NET-Tutorials\\api\\obj\\",
+      "outputPath": "C:\\Users\\rmayu\\Documents\\GitHub\\Project\\api\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

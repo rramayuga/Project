@@ -50,7 +50,7 @@ namespace api.Controllers
             if (stock == null)
             {
                 return NotFound();
-            }
+            } 
 
             return Ok(stock.ToStockDto());
         }
