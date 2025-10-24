@@ -33,10 +33,11 @@ namespace api.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            // OLD LINQ VERSION:
-            // var stocks = await _stockRepo.GetAllAsync(query);
-            // var stockDto = stocks.Select(s => s.ToStockDto()).ToList();
-            // return Ok(stockDto);
+            /* OLD LINQ:
+            var stocks = await _stockRepo.GetAllAsync(query);
+            var stockDto = stocks.Select(s => s.ToStockDto()).ToList();
+            return Ok(stockDto);
+            */
 
             // NEW: Stored Procedure inside Repository
             var stocks = await _stockRepo.GetAllAsync(query);
@@ -50,9 +51,10 @@ namespace api.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            // OLD:
-            // var stock = await _stockRepo.GetByIdAsync(id);
-            // if (stock == null) return NotFound();
+            /* OLD:
+            var stock = await _stockRepo.GetByIdAsync(id);
+            if (stock == null) return NotFound();
+            */
 
             // NEW:
             var stock = await _stockRepo.GetByIdAsync(id);

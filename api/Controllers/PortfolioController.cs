@@ -58,7 +58,7 @@ namespace api.Controllers
                 if (stock == null)
                     return BadRequest("Stock does not exists");
                 else
-                    await _stockRepo.CreateAsync(stock); // SP AddStock()
+                    await _stockRepo.CreateAsync(stock);
             }
 
             if (stock == null) return BadRequest("Stock not found");
