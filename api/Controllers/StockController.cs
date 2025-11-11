@@ -19,6 +19,7 @@ namespace api.Controllers
     {
         private readonly ApplicationDBContext _context;
         private readonly IStockRepository _stockRepo;
+
         public StockController(ApplicationDBContext context, IStockRepository stockRepo)
         {
             _stockRepo = stockRepo;
@@ -32,10 +33,15 @@ namespace api.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
+            /* OLD LINQ:
             var stocks = await _stockRepo.GetAllAsync(query);
-
             var stockDto = stocks.Select(s => s.ToStockDto()).ToList();
+            return Ok(stockDto);
+            */
 
+            // NEW: Stored Procedure inside Repository
+            var stocks = await _stockRepo.GetAllAsync(query);
+            var stockDto = stocks.Select(s => s.ToStockDto()).ToList();
             return Ok(stockDto);
         }
 
@@ -45,12 +51,15 @@ namespace api.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
+            /* OLD:
             var stock = await _stockRepo.GetByIdAsync(id);
+            if (stock == null) return NotFound();
+            */
 
+            // NEW:
+            var stock = await _stockRepo.GetByIdAsync(id);
             if (stock == null)
-            {
                 return NotFound();
-            } 
 
             return Ok(stock.ToStockDto());
         }
@@ -63,6 +72,8 @@ namespace api.Controllers
 
             var stockModel = stockDto.ToStockFromCreateDTO();
 
+            // OLD: _context.Stocks.Add(stockModel);
+            // NEW: CALL AddStock()
             await _stockRepo.CreateAsync(stockModel);
 
             return CreatedAtAction(nameof(GetById), new { id = stockModel.Id }, stockModel.ToStockDto());
@@ -75,12 +86,12 @@ namespace api.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
+            // OLD LINQ: await _stockRepo.UpdateAsync(...)
+            // NEW: SP UpdateStock()
             var stockModel = await _stockRepo.UpdateAsync(id, updateDto);
 
             if (stockModel == null)
-            {
                 return NotFound();
-            }
 
             return Ok(stockModel.ToStockDto());
         }
@@ -92,15 +103,14 @@ namespace api.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
+            // OLD LINQ: await _stockRepo.DeleteAsync(...)
+            // NEW: SP DeleteStock()
             var stockModel = await _stockRepo.DeleteAsync(id);
 
             if (stockModel == null)
-            {
                 return NotFound();
-            }
 
             return NoContent();
         }
-
     }
 }

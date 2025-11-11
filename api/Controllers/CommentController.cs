@@ -22,6 +22,7 @@ namespace api.Controllers
         private readonly IStockRepository _stockRepo;
         private readonly UserManager<AppUser> _userManager;
         private readonly IFMPService _fmpService;
+
         public CommentController(ICommentRepository commentRepo,
         IStockRepository stockRepo, UserManager<AppUser> userManager,
         IFMPService fmpService)
@@ -39,25 +40,35 @@ namespace api.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
+            /*  OLD LINQ :
             var comments = await _commentRepo.GetAllAsync(queryObject);
-
             var commentDto = comments.Select(s => s.ToCommentDto());
-
+             return Ok(commentDto);
+            */
+            
+            //  SP
+            var comments = await _commentRepo.GetAllAsync(queryObject);
+            var commentDto = comments.Select(s => s.ToCommentDto());
             return Ok(commentDto);
         }
 
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetById([FromRoute] int id)
         {
+            
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
+            /*OLD LINQ:
             var comment = await _commentRepo.GetByIdAsync(id);
+            if (comment == null) return NotFound();
+            return Ok(comment.ToCommentDto());
+            */
 
+            // NEW:
+            var comment = await _commentRepo.GetByIdAsync(id);
             if (comment == null)
-            {
                 return NotFound();
-            }
 
             return Ok(comment.ToCommentDto());
         }
@@ -69,19 +80,24 @@ namespace api.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
+            /* OLD LINQ
             var stock = await _stockRepo.GetBySymbolAsync(symbol);
+            if (stock == null)
+            {
+                stock = await _fmpService.FindStockBySymbolAsync(symbol);
+                if (stock == null) return BadRequest("Stock does not exists");
+                else await _stockRepo.CreateAsync(stock);
+            } */
 
+            // NEW
+            var stock = await _stockRepo.GetBySymbolAsync(symbol);
             if (stock == null)
             {
                 stock = await _fmpService.FindStockBySymbolAsync(symbol);
                 if (stock == null)
-                {
                     return BadRequest("Stock does not exists");
-                }
                 else
-                {
-                    await _stockRepo.CreateAsync(stock);
-                }
+                    await _stockRepo.CreateAsync(stock); // Calls SP internally
             }
 
             var username = User.GetUsername();
@@ -89,7 +105,11 @@ namespace api.Controllers
 
             var commentModel = commentDto.ToCommentFromCreate(stock.Id);
             commentModel.AppUserId = appUser.Id;
+
+            // OLD: _context.Comments.Add(comment);
+            // NEW: Calls SP AddComment()
             await _commentRepo.CreateAsync(commentModel);
+
             return CreatedAtAction(nameof(GetById), new { id = commentModel.Id }, commentModel.ToCommentDto());
         }
 
@@ -100,12 +120,15 @@ namespace api.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
+            /* OLD LINQ:
             var comment = await _commentRepo.UpdateAsync(id, updateDto.ToCommentFromUpdate(id));
+            if (comment == null) return NotFound("Comment not found");
+            */
 
+            // NEW: SP UpdateComment()
+            var comment = await _commentRepo.UpdateAsync(id, updateDto.ToCommentFromUpdate(id));
             if (comment == null)
-            {
                 return NotFound("Comment not found");
-            }
 
             return Ok(comment.ToCommentDto());
         }
@@ -117,12 +140,12 @@ namespace api.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
+            // OLD: _context.Comments.Remove()
+            // NEW: SP DeleteComment()
             var commentModel = await _commentRepo.DeleteAsync(id);
 
             if (commentModel == null)
-            {
                 return NotFound("Comment does not exist");
-            }
 
             return Ok(commentModel);
         }
